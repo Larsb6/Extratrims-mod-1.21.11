@@ -3,6 +3,11 @@
 A Fabric mod for **Minecraft 1.21.11** that adds eight new armor trim patterns,
 each with its own smithing template that generates in a structure suited to it.
 
+![The eight patterns in gold trim](docs/preview-gold.png)
+
+*The eight patterns, shown in gold on iron armour. All sixteen vanilla trim
+materials work; `docs/preview-amethyst.png` shows the same set in amethyst.*
+
 ## The patterns
 
 | Pattern | Found in | Duplicate with |
@@ -73,6 +78,10 @@ python3 tools/generate_textures.py --masks /path/to/extracted/client
 python3 tools/generate_items.py    # smithing template icons and the mod icon
 python3 tools/generate_data.py     # trim patterns, recipes, models, lang, atlas
 python3 tools/validate.py          # consistency checks over everything above
+
+# Re-render the preview sheets in docs/
+python3 tools/preview.py --vanilla /path/to/extracted/client --material gold \
+    --out docs/preview-gold.png
 ```
 
 To add a pattern: add a motif function to `generate_textures.py`, a glyph and

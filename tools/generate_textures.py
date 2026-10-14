@@ -67,67 +67,64 @@ LEGGINGS_FACES = {
 # Which rows of a 12-row side face each piece actually shows:
 #   helmet  v0-4    chestplate v0-8   arms v0-5
 #   boots   v6-11   leggings legs v0-6   leggings belt v7-11
-# Bands at v1 / v7 / v10 therefore reach every piece.
+# Bands at v1 / v7 / v10 therefore reach every piece, and motifs drawn down
+# the full height of a face reach all of them by construction.
+#
+# The eight patterns deliberately differ in placement, not just in texture:
+# banded, vertical, allover and localised designs read apart at a glance.
 COLLAR, WAIST, HEM = 1, 7, 10
 
 
+def centre_col(u, fw):
+    """The single middle column of a face."""
+    return u == fw // 2
+
+
 def crest(u, v, fw, fh):
-    """Chevrons marching around collar and waist."""
+    """Chevrons at the collar over a spine running down the piece."""
     uu = u % 4
-    for base in (COLLAR, WAIST):
-        if v == base and uu in (1, 2):
-            return T4
-        if v == base + 1 and uu in (0, 3):
-            return T2
-    if v == HEM and uu in (1, 2):
+    if v == COLLAR and uu in (1, 2):
+        return T4
+    if v == COLLAR + 1 and uu in (0, 3):
+        return T2
+    if v >= COLLAR + 2 and centre_col(u, fw):
         return T3
     return None
 
 
 def tusk(u, v, fw, fh):
-    """Broad blunt banding, the heaviest of the set."""
+    """A heavy belt at the waist with a capped shoulder, and nothing between."""
     uu = u % 4
-    for base in (COLLAR, WAIST):
-        if v == base and uu != 3:
-            return T4
-        if v == base + 1 and uu == 1:
-            return T1
-    if v == HEM and uu != 3:
+    if v in (WAIST, WAIST + 1) and uu != 3:
+        return T4 if v == WAIST else T1
+    if v == 0 and uu != 3:
         return T3
     return None
 
 
 def thorn(u, v, fw, fh):
-    """A rule with barbs biting away from it."""
+    """Barbed ribs running vertically down the whole piece."""
     uu = u % 4
-    if v == COLLAR and uu != 2:
+    if uu == 1 and v % 4 != 3:
         return T3
-    if v == COLLAR + 1 and uu == 0:
+    if uu == 0 and v % 3 == 1:
         return T4
-    if v == WAIST and uu != 2:
-        return T3
-    if v == WAIST - 1 and uu == 0:
-        return T4
-    if v == HEM and uu != 2:
-        return T2
+    if uu == 2 and v % 6 == 2:
+        return T1
     return None
 
 
 def lattice(u, v, fw, fh):
-    """Crosshatched diagonals inside narrow bands."""
-    for base in (COLLAR, WAIST):
-        if base <= v <= base + 1:
-            if (u + v) % 4 == 0:
-                return T4
-            if (u - v) % 4 == 0:
-                return T2
-    if v == HEM and u % 4 == 0:
-        return T2
+    """An allover diagonal crosshatch."""
+    if (u + v) % 6 == 0:
+        return T4
+    if (u - v) % 6 == 0:
+        return T1
     return None
 
 
 def prism(u, v, fw, fh):
-    """Faceted rhombi, one row per band."""
+    """Faceted rhombi at collar and waist."""
     for cy in (COLLAR + 1, WAIST + 1):
         if u % 4 == 1:
             if abs(v - cy) == 1:
@@ -136,47 +133,44 @@ def prism(u, v, fw, fh):
                 return T1
         elif u % 4 in (0, 2) and v == cy:
             return T3
-    if v == HEM and u % 4 == 1:
-        return T2
     return None
 
 
 def ember(u, v, fw, fh):
-    """Guttering flecks that thin out as they rise."""
+    """Flecks banked at the hem, guttering out towards the shoulders."""
     h = (u * 7 + v * 13) % 11
-    if v == COLLAR and h < 5:
-        return T3
-    if v == COLLAR + 2 and h < 2:
-        return T1
-    if v == WAIST and h < 6:
-        return T4
-    if v == WAIST + 1 and h < 3:
-        return T2
-    if v == HEM and h < 6:
-        return T3
+    if v >= HEM:
+        threshold = 7
+    elif v >= WAIST:
+        threshold = 5
+    elif v >= 4:
+        threshold = 3
+    else:
+        threshold = 1
+    if h < threshold:
+        return T4 if v >= WAIST else T2
     return None
 
 
 def weave(u, v, fw, fh):
-    """Over-and-under braid."""
-    for base in (COLLAR, WAIST):
-        if base <= v <= base + 1 and u % 4 != 3:
+    """A braid at the waist, closed off by cuffs top and bottom."""
+    uu = u % 4
+    for base in (WAIST - 1, WAIST):
+        if v == base and uu != 3:
             return T4 if ((u // 2) + (v - base)) % 2 == 0 else T1
-    if v == HEM and u % 4 != 3:
+    if v in (0, fh - 1) and uu != 3:
         return T2
     return None
 
 
 def halo(u, v, fw, fh):
-    """Dashed rings with a soft shadow under each."""
+    """Three thin rings, each with a soft shadow beneath it."""
     uu = u % 4
-    for base in (COLLAR, WAIST):
+    for base in (COLLAR, WAIST, HEM):
         if v == base and uu != 3:
             return T4
-        if v == base + 1 and uu != 3:
+        if v == base + 1 and base != HEM and uu != 3:
             return T0
-    if v == HEM and uu != 3:
-        return T2
     return None
 
 
