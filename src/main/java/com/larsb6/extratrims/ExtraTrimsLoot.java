@@ -25,15 +25,16 @@ public final class ExtraTrimsLoot {
 	private static final Map<String, Placement> PLACEMENTS = new LinkedHashMap<>();
 
 	static {
-		PLACEMENTS.put("crest", new Placement(LootTables.PILLAGER_OUTPOST_CHEST, 0.25F));
-		PLACEMENTS.put("weave", new Placement(LootTables.WOODLAND_MANSION_CHEST, 0.25F));
-		PLACEMENTS.put("halo", new Placement(LootTables.END_CITY_TREASURE_CHEST, 0.20F));
-		PLACEMENTS.put("thorn", new Placement(LootTables.JUNGLE_TEMPLE_CHEST, 0.25F));
 		PLACEMENTS.put("ember", new Placement(LootTables.RUINED_PORTAL_CHEST, 0.25F));
-		PLACEMENTS.put("fang", new Placement(LootTables.NETHER_BRIDGE_CHEST, 0.20F));
-		PLACEMENTS.put("coil", new Placement(LootTables.STRONGHOLD_LIBRARY_CHEST, 0.20F));
-		PLACEMENTS.put("sigil", new Placement(LootTables.DESERT_PYRAMID_CHEST, 0.20F));
-		PLACEMENTS.put("scale", new Placement(LootTables.UNDERWATER_RUIN_BIG_CHEST, 0.20F));
+		PLACEMENTS.put("umbra", new Placement(LootTables.ANCIENT_CITY_CHEST, 0.20F));
+		PLACEMENTS.put("totemic", new Placement(LootTables.JUNGLE_TEMPLE_CHEST, 0.25F));
+		PLACEMENTS.put("halo", new Placement(LootTables.END_CITY_TREASURE_CHEST, 0.20F));
+		PLACEMENTS.put("keystone", new Placement(LootTables.STRONGHOLD_CORRIDOR_CHEST, 0.20F));
+		PLACEMENTS.put("mosaic", new Placement(LootTables.DESERT_PYRAMID_CHEST, 0.20F));
+		PLACEMENTS.put("zenith", new Placement(LootTables.BASTION_TREASURE_CHEST, 0.20F));
+		PLACEMENTS.put("harbor", new Placement(LootTables.SHIPWRECK_TREASURE_CHEST, 0.25F));
+		PLACEMENTS.put("runic", new Placement(LootTables.STRONGHOLD_LIBRARY_CHEST, 0.20F));
+		PLACEMENTS.put("lattice", new Placement(LootTables.WOODLAND_MANSION_CHEST, 0.25F));
 	}
 
 	private ExtraTrimsLoot() {

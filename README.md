@@ -1,30 +1,30 @@
 # Extra Trims
 
-A Fabric mod for **Minecraft 1.21.11** that adds nine new armor trim patterns,
+A Fabric mod for **Minecraft 1.21.11** that adds ten new armor trim patterns,
 each with its own smithing template that generates in a structure suited to it.
 
-![The nine patterns in gold trim](docs/preview-gold.png)
+![The ten patterns in gold trim](docs/preview-gold.png)
 
-*The nine patterns, shown in gold on iron armour. All sixteen vanilla trim
+*The ten patterns, shown in gold on iron armour. All sixteen vanilla trim
 materials work; `docs/preview-amethyst.png` shows the same set in amethyst.*
 
 ## The patterns
 
-| Pattern | Look | Found in | Duplicate with | Coverage |
+| Pattern | Design | Found in | Duplicate with | Coverage |
 |---|---|---|---|---|
-| Weave | Braid at the waist, closed by cuffs | Woodland mansion chests | Dark oak planks | 24% |
 | Ember | Flecks banked at the hem, guttering out upwards | Ruined portal chests | Magma block | 24% |
-| Crest | Spine down the piece, chevrons at the collar | Pillager outpost chests | Cobblestone | 25% |
-| Halo | Three thin rings with soft shadows | End city treasure chests | Purpur block | 33% |
-| Thorn | Barbed ribs running vertically | Jungle temple chests | Mossy cobblestone | 33% |
-| Coil | Bands winding diagonally around the piece | Stronghold library chests | Stone bricks | 46% |
-| Sigil | Rings radiating from the centre of each face | Desert pyramid chests | Sandstone | 46% |
-| Fang | Teeth hanging from the collar and waist | Nether fortress chests | Netherrack | 50% |
-| Scale | Overlapping scales, allover | Large ocean ruin chests | Prismarine | 59% |
+| Zenith | A long thin cross with a single crossbar | Bastion treasure chests | Blackstone | 27% |
+| Mosaic | A centred vertical stack of tiles | Desert pyramid chests | Sandstone | 33% |
+| Runic | Nested arches under bold shoulder bars | Stronghold library chests | End stone bricks | 33% |
+| Halo | A shallow arch over a triangular tent | End city treasure chests | Purpur block | 36% |
+| Harbor | A mast with two spars widening downward | Shipwreck treasure chests | Oak planks | 37% |
+| Keystone | Dense masonry blocks, bracketed shoulders | Stronghold corridor chests | Stone bricks | 41% |
+| Umbra | A chunky cross patee with a plumed helm | Ancient city chests | Deepslate bricks | 42% |
+| Lattice | Zigzag rows with hollow shoulder rings | Woodland mansion chests | Dark oak planks | 42% |
+| Totemic | A tapering stack with a bold wing bar | Jungle temple chests | Mossy cobblestone | 45% |
 
 Coverage is the share of the armour's 648-pixel footprint the trim paints on.
-Vanilla ranges from 11% (shaper) to 63% (silence), so the set spans light
-accents through to a full allover texture.
+Vanilla ranges from 11% (shaper) to 63% (silence).
 
 Templates are applied at a smithing table exactly like vanilla ones, work with
 all sixteen vanilla trim materials, and duplicate with the same
@@ -89,9 +89,19 @@ python3 tools/preview.py --vanilla /path/to/extracted/client --material gold \
     --out docs/preview-gold.png
 ```
 
-To add a pattern: add a motif function to `generate_textures.py`, a glyph and
-colour to `generate_items.py`, a row to `PATTERNS` in `generate_data.py`, and
-a placement in `ExtraTrimsLoot`.
+Patterns are hand-authored pixel art: `generate_textures.py` holds one small
+bitmap per kind of armour face (`helm`, `body`, `arm`, `leg`, `side`) per
+pattern, painted into the standard UV boxes and masked to the armour. Ember
+is the exception and stays a procedural motif.
+
+The bitmaps are written for the full 12-row box, but each armour piece only
+shows part of it, which is worth knowing before drawing: the chest shows rows
+0-10 and has a neck cutout across rows 0-1, arms show only rows 0-5, leggings
+legs rows 0-8, boots rows 6-11, and the leggings belt rows 7-11.
+
+To add a pattern: add its bitmaps to `ART` in `generate_textures.py`, a glyph
+and colour to `generate_items.py`, a row to `PATTERNS` in `generate_data.py`,
+and a placement in `ExtraTrimsLoot`.
 
 ## Licence
 

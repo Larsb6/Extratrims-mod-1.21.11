@@ -12,7 +12,7 @@ import os
 
 from PIL import Image, ImageDraw
 
-PATTERNS = ["crest", "weave", "halo", "ember", "thorn", "fang", "coil", "sigil", "scale"]
+PATTERNS = ["ember", "umbra", "totemic", "halo", "keystone", "mosaic", "zenith", "harbor", "runic", "lattice"]
 
 # Front faces: (src_x, src_y, w, h) -> (dst_x, dst_y) in a 16x32 front view.
 # "mirror" duplicates the right limb as the left one, as the model does.

@@ -13,15 +13,16 @@ RES = "src/main/resources"
 
 # name -> (display name, duplication base block)
 PATTERNS = {
-    "crest": ("Crest", "minecraft:cobblestone"),
-    "weave": ("Weave", "minecraft:dark_oak_planks"),
-    "halo":  ("Halo",  "minecraft:purpur_block"),
-    "thorn": ("Thorn", "minecraft:mossy_cobblestone"),
-    "ember": ("Ember", "minecraft:magma_block"),
-    "fang":  ("Fang",  "minecraft:netherrack"),
-    "coil":  ("Coil",  "minecraft:stone_bricks"),
-    "sigil": ("Sigil", "minecraft:sandstone"),
-    "scale": ("Scale", "minecraft:prismarine"),
+    "ember":    ("Ember",    "minecraft:magma_block"),
+    "umbra":    ("Umbra",    "minecraft:deepslate_bricks"),
+    "totemic":  ("Totemic",  "minecraft:mossy_cobblestone"),
+    "halo":     ("Halo",     "minecraft:purpur_block"),
+    "keystone": ("Keystone", "minecraft:stone_bricks"),
+    "mosaic":   ("Mosaic",   "minecraft:sandstone"),
+    "zenith":   ("Zenith",   "minecraft:blackstone"),
+    "harbor":   ("Harbor",   "minecraft:oak_planks"),
+    "runic":    ("Runic",    "minecraft:end_stone_bricks"),
+    "lattice":  ("Lattice",  "minecraft:dark_oak_planks"),
 }
 
 # The vanilla trim material permutations, copied from the client's

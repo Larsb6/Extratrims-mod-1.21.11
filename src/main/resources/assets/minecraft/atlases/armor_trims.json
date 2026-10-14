@@ -22,24 +22,26 @@
         "resin": "minecraft:trims/color_palettes/resin"
       },
       "textures": [
-        "extratrims:trims/entity/humanoid/crest",
-        "extratrims:trims/entity/humanoid_leggings/crest",
-        "extratrims:trims/entity/humanoid/weave",
-        "extratrims:trims/entity/humanoid_leggings/weave",
-        "extratrims:trims/entity/humanoid/halo",
-        "extratrims:trims/entity/humanoid_leggings/halo",
-        "extratrims:trims/entity/humanoid/thorn",
-        "extratrims:trims/entity/humanoid_leggings/thorn",
         "extratrims:trims/entity/humanoid/ember",
         "extratrims:trims/entity/humanoid_leggings/ember",
-        "extratrims:trims/entity/humanoid/fang",
-        "extratrims:trims/entity/humanoid_leggings/fang",
-        "extratrims:trims/entity/humanoid/coil",
-        "extratrims:trims/entity/humanoid_leggings/coil",
-        "extratrims:trims/entity/humanoid/sigil",
-        "extratrims:trims/entity/humanoid_leggings/sigil",
-        "extratrims:trims/entity/humanoid/scale",
-        "extratrims:trims/entity/humanoid_leggings/scale"
+        "extratrims:trims/entity/humanoid/umbra",
+        "extratrims:trims/entity/humanoid_leggings/umbra",
+        "extratrims:trims/entity/humanoid/totemic",
+        "extratrims:trims/entity/humanoid_leggings/totemic",
+        "extratrims:trims/entity/humanoid/halo",
+        "extratrims:trims/entity/humanoid_leggings/halo",
+        "extratrims:trims/entity/humanoid/keystone",
+        "extratrims:trims/entity/humanoid_leggings/keystone",
+        "extratrims:trims/entity/humanoid/mosaic",
+        "extratrims:trims/entity/humanoid_leggings/mosaic",
+        "extratrims:trims/entity/humanoid/zenith",
+        "extratrims:trims/entity/humanoid_leggings/zenith",
+        "extratrims:trims/entity/humanoid/harbor",
+        "extratrims:trims/entity/humanoid_leggings/harbor",
+        "extratrims:trims/entity/humanoid/runic",
+        "extratrims:trims/entity/humanoid_leggings/runic",
+        "extratrims:trims/entity/humanoid/lattice",
+        "extratrims:trims/entity/humanoid_leggings/lattice"
       ]
     }
   ]
