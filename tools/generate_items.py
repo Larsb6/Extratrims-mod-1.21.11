@@ -17,13 +17,13 @@ CYAN_MID = (75, 201, 201, 255)
 # pattern -> plate body colour, themed to its structure
 BODY = {
     "crest":   (122, 109, 94),    # pillager outpost, dark oak
-    "tusk":    (213, 196, 150),   # desert pyramid, sandstone
-    "thorn":   (106, 126, 88),    # jungle temple, moss
-    "lattice": (134, 134, 134),   # stronghold, stone brick
-    "prism":   (122, 175, 163),   # ocean ruins, prismarine
-    "ember":   (124, 72, 69),     # nether fortress, netherrack
     "weave":   (102, 78, 47),     # woodland mansion, dark oak
     "halo":    (161, 116, 161),   # end city, purpur
+    "thorn":   (106, 126, 88),    # jungle temple, moss
+    "fang":    (124, 72, 69),     # nether fortress, netherrack
+    "coil":    (134, 134, 134),   # stronghold, stone brick
+    "sigil":   (213, 196, 150),   # desert pyramid, sandstone
+    "scale":   (122, 175, 163),   # ocean ruins, prismarine
 }
 
 # 6x6 glyphs: '#' bright cyan, '+' mid cyan, '.' transparent
@@ -35,46 +35,6 @@ GLYPHS = {
         "..##..",
         ".####.",
         "##..##",
-    ],
-    "tusk": [
-        "######",
-        "+####+",
-        "......",
-        "......",
-        "+####+",
-        "######",
-    ],
-    "thorn": [
-        "..##..",
-        "+.##.+",
-        "######",
-        "..##..",
-        "+####+",
-        "..##..",
-    ],
-    "lattice": [
-        "#+..+#",
-        "+#..#+",
-        "..##..",
-        "..##..",
-        "+#..#+",
-        "#+..+#",
-    ],
-    "prism": [
-        "..##..",
-        ".#++#.",
-        "#+##+#",
-        "#+##+#",
-        ".#++#.",
-        "..##..",
-    ],
-    "ember": [
-        ".#..#.",
-        "#..#.+",
-        "+.#..#",
-        ".#..#.",
-        "#..#.+",
-        "..##..",
     ],
     "weave": [
         "##..##",
@@ -91,6 +51,46 @@ GLYPHS = {
         "#....#",
         "#+..+#",
         ".####.",
+    ],
+    "thorn": [
+        "..##..",
+        "+.##.+",
+        "######",
+        "..##..",
+        "+####+",
+        "..##..",
+    ],
+    "fang": [
+        "######",
+        "######",
+        "#+##+#",
+        ".#..#.",
+        ".#..#.",
+        "..#...",
+    ],
+    "coil": [
+        "..#..#",
+        ".#..#.",
+        "#..#..",
+        "..#..#",
+        ".#..#.",
+        "#..#..",
+    ],
+    "sigil": [
+        "..##..",
+        ".#..#.",
+        "#.##.#",
+        "#.##.#",
+        ".#..#.",
+        "..##..",
+    ],
+    "scale": [
+        "#++#++",
+        ".##.##",
+        "#++#++",
+        ".##.##",
+        "#++#++",
+        ".##.##",
     ],
 }
 
@@ -141,8 +141,8 @@ def make_icon(name):
 
 
 def make_mod_icon():
-    """128x128 mod icon: the halo plate, nearest-neighbour upscaled."""
-    base = make_icon("halo")
+    """128x128 mod icon: the sigil plate, nearest-neighbour upscaled."""
+    base = make_icon("sigil")
     return base.resize((128, 128), Image.NEAREST)
 
 

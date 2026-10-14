@@ -70,8 +70,10 @@ LEGGINGS_FACES = {
 # Bands at v1 / v7 / v10 therefore reach every piece, and motifs drawn down
 # the full height of a face reach all of them by construction.
 #
-# The eight patterns deliberately differ in placement, not just in texture:
-# banded, vertical, allover and localised designs read apart at a glance.
+# The patterns deliberately differ in both placement and weight. The armour
+# footprint is 648 pixels, and vanilla's densest trim (silence) covers about
+# 63% of it, so the heavy patterns here aim for roughly half to two thirds
+# while the light ones stay near a quarter.
 COLLAR, WAIST, HEM = 1, 7, 10
 
 
@@ -79,6 +81,17 @@ def centre_col(u, fw):
     """The single middle column of a face."""
     return u == fw // 2
 
+
+def ring_index(u, v, fw, fh):
+    """Diamond distance from a face's centre, in whole rings.
+
+    Doubled internally so faces of even width still have a true centre.
+    """
+    d2 = abs(2 * u - (fw - 1)) + abs(2 * v - (fh - 1))
+    return d2 // 2
+
+
+# --- light patterns -------------------------------------------------------
 
 def crest(u, v, fw, fh):
     """Chevrons at the collar over a spine running down the piece."""
@@ -89,66 +102,6 @@ def crest(u, v, fw, fh):
         return T2
     if v >= COLLAR + 2 and centre_col(u, fw):
         return T3
-    return None
-
-
-def tusk(u, v, fw, fh):
-    """A heavy belt at the waist with a capped shoulder, and nothing between."""
-    uu = u % 4
-    if v in (WAIST, WAIST + 1) and uu != 3:
-        return T4 if v == WAIST else T1
-    if v == 0 and uu != 3:
-        return T3
-    return None
-
-
-def thorn(u, v, fw, fh):
-    """Barbed ribs running vertically down the whole piece."""
-    uu = u % 4
-    if uu == 1 and v % 4 != 3:
-        return T3
-    if uu == 0 and v % 3 == 1:
-        return T4
-    if uu == 2 and v % 6 == 2:
-        return T1
-    return None
-
-
-def lattice(u, v, fw, fh):
-    """An allover diagonal crosshatch."""
-    if (u + v) % 6 == 0:
-        return T4
-    if (u - v) % 6 == 0:
-        return T1
-    return None
-
-
-def prism(u, v, fw, fh):
-    """Faceted rhombi at collar and waist."""
-    for cy in (COLLAR + 1, WAIST + 1):
-        if u % 4 == 1:
-            if abs(v - cy) == 1:
-                return T4
-            if v == cy:
-                return T1
-        elif u % 4 in (0, 2) and v == cy:
-            return T3
-    return None
-
-
-def ember(u, v, fw, fh):
-    """Flecks banked at the hem, guttering out towards the shoulders."""
-    h = (u * 7 + v * 13) % 11
-    if v >= HEM:
-        threshold = 7
-    elif v >= WAIST:
-        threshold = 5
-    elif v >= 4:
-        threshold = 3
-    else:
-        threshold = 1
-    if h < threshold:
-        return T4 if v >= WAIST else T2
     return None
 
 
@@ -174,15 +127,79 @@ def halo(u, v, fw, fh):
     return None
 
 
+def thorn(u, v, fw, fh):
+    """Barbed ribs running vertically down the whole piece."""
+    uu = u % 4
+    if uu == 1 and v % 4 != 3:
+        return T3
+    if uu == 0 and v % 3 == 1:
+        return T4
+    if uu == 2 and v % 6 == 2:
+        return T1
+    return None
+
+
+# --- heavy patterns -------------------------------------------------------
+
+def fang(u, v, fw, fh):
+    """Teeth hanging from the collar and the waist."""
+    uu = u % 4
+    for anchor in (0, 6):
+        depth = v - anchor
+        if not 0 <= depth <= 3:
+            continue
+        width = 4 - depth
+        left = depth // 2
+        if left <= uu < left + width:
+            return (T4, T3, T1, T0)[depth]
+    return None
+
+
+def coil(u, v, fw, fh):
+    """Bands winding diagonally around the piece."""
+    k = (u + v) % 6
+    if k == 0:
+        return T4
+    if k == 1:
+        return T2
+    if (u - v) % 5 == 0:
+        return DARK
+    return None
+
+
+def sigil(u, v, fw, fh):
+    """Concentric rings radiating from the centre of every face."""
+    r = ring_index(u, v, fw, fh)
+    if r % 4 == 0:
+        return T4
+    if r % 4 == 1:
+        return T0
+    return None
+
+
+def scale(u, v, fw, fh):
+    """Overlapping scales covering the piece, the heaviest of the set."""
+    row = v // 3
+    cu = (u + (2 if row % 2 else 0)) % 4
+    cv = v % 3
+    if cv == 2:
+        return T4 if cu in (1, 2) else None
+    if cu in (1, 2):
+        return T1
+    if cu == 0 and cv == 1:
+        return T2
+    return None
+
+
 PATTERNS = {
     "crest": crest,
-    "tusk": tusk,
-    "thorn": thorn,
-    "lattice": lattice,
-    "prism": prism,
-    "ember": ember,
     "weave": weave,
     "halo": halo,
+    "thorn": thorn,
+    "fang": fang,
+    "coil": coil,
+    "sigil": sigil,
+    "scale": scale,
 }
 
 

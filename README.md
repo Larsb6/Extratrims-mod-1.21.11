@@ -10,16 +10,20 @@ materials work; `docs/preview-amethyst.png` shows the same set in amethyst.*
 
 ## The patterns
 
-| Pattern | Found in | Duplicate with |
-|---|---|---|
-| Crest | Pillager outpost chests | Cobblestone |
-| Tusk | Desert pyramid chests | Sandstone |
-| Thorn | Jungle temple chests | Mossy cobblestone |
-| Lattice | Stronghold library chests | Stone bricks |
-| Prism | Large ocean ruin chests | Prismarine |
-| Ember | Nether fortress chests | Netherrack |
-| Weave | Woodland mansion chests | Dark oak planks |
-| Halo | End city treasure chests | Purpur block |
+| Pattern | Look | Found in | Duplicate with | Coverage |
+|---|---|---|---|---|
+| Weave | Braid at the waist, closed by cuffs | Woodland mansion chests | Dark oak planks | 24% |
+| Crest | Spine down the piece, chevrons at the collar | Pillager outpost chests | Cobblestone | 25% |
+| Halo | Three thin rings with soft shadows | End city treasure chests | Purpur block | 33% |
+| Thorn | Barbed ribs running vertically | Jungle temple chests | Mossy cobblestone | 33% |
+| Coil | Bands winding diagonally around the piece | Stronghold library chests | Stone bricks | 46% |
+| Sigil | Rings radiating from the centre of each face | Desert pyramid chests | Sandstone | 46% |
+| Fang | Teeth hanging from the collar and waist | Nether fortress chests | Netherrack | 50% |
+| Scale | Overlapping scales, allover | Large ocean ruin chests | Prismarine | 59% |
+
+Coverage is the share of the armour's 648-pixel footprint the trim paints on.
+Vanilla ranges from 11% (shaper) to 63% (silence), so the set spans light
+accents through to a full allover texture.
 
 Templates are applied at a smithing table exactly like vanilla ones, work with
 all sixteen vanilla trim materials, and duplicate with the same
