@@ -20,6 +20,7 @@ BODY = {
     "weave":   (102, 78, 47),     # woodland mansion, dark oak
     "halo":    (161, 116, 161),   # end city, purpur
     "thorn":   (106, 126, 88),    # jungle temple, moss
+    "ember":   (92, 74, 70),      # ruined portal, blackstone
     "fang":    (124, 72, 69),     # nether fortress, netherrack
     "coil":    (134, 134, 134),   # stronghold, stone brick
     "sigil":   (213, 196, 150),   # desert pyramid, sandstone
@@ -58,6 +59,14 @@ GLYPHS = {
         "######",
         "..##..",
         "+####+",
+        "..##..",
+    ],
+    "ember": [
+        ".#..#.",
+        "#..#.+",
+        "+.#..#",
+        ".#..#.",
+        "#..#.+",
         "..##..",
     ],
     "fang": [

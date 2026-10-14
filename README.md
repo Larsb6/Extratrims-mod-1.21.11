@@ -1,11 +1,11 @@
 # Extra Trims
 
-A Fabric mod for **Minecraft 1.21.11** that adds eight new armor trim patterns,
+A Fabric mod for **Minecraft 1.21.11** that adds nine new armor trim patterns,
 each with its own smithing template that generates in a structure suited to it.
 
-![The eight patterns in gold trim](docs/preview-gold.png)
+![The nine patterns in gold trim](docs/preview-gold.png)
 
-*The eight patterns, shown in gold on iron armour. All sixteen vanilla trim
+*The nine patterns, shown in gold on iron armour. All sixteen vanilla trim
 materials work; `docs/preview-amethyst.png` shows the same set in amethyst.*
 
 ## The patterns
@@ -13,6 +13,7 @@ materials work; `docs/preview-amethyst.png` shows the same set in amethyst.*
 | Pattern | Look | Found in | Duplicate with | Coverage |
 |---|---|---|---|---|
 | Weave | Braid at the waist, closed by cuffs | Woodland mansion chests | Dark oak planks | 24% |
+| Ember | Flecks banked at the hem, guttering out upwards | Ruined portal chests | Magma block | 24% |
 | Crest | Spine down the piece, chevrons at the collar | Pillager outpost chests | Cobblestone | 25% |
 | Halo | Three thin rings with soft shadows | End city treasure chests | Purpur block | 33% |
 | Thorn | Barbed ribs running vertically | Jungle temple chests | Mossy cobblestone | 33% |

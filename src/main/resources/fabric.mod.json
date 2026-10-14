@@ -3,7 +3,7 @@
 	"id": "extratrims",
 	"version": "${version}",
 	"name": "Extra Trims",
-	"description": "Adds eight new armor trim patterns, each with its own smithing template found in a fitting structure.",
+	"description": "Adds nine new armor trim patterns, each with its own smithing template found in a fitting structure.",
 	"authors": [
 		"larsb6"
 	],

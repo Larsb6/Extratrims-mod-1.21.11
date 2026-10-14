@@ -26,7 +26,7 @@ import net.minecraft.util.Rarity;
 public final class ExtraTrimsItems {
 	/** Pattern ids, matching the trim_pattern files and texture names. */
 	public static final String[] PATTERNS = {
-			"crest", "weave", "halo", "thorn", "fang", "coil", "sigil", "scale"
+			"crest", "weave", "halo", "thorn", "ember", "fang", "coil", "sigil", "scale"
 	};
 
 	private static final Map<String, Item> TEMPLATES = new LinkedHashMap<>();

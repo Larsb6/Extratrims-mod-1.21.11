@@ -29,6 +29,7 @@ public final class ExtraTrimsLoot {
 		PLACEMENTS.put("weave", new Placement(LootTables.WOODLAND_MANSION_CHEST, 0.25F));
 		PLACEMENTS.put("halo", new Placement(LootTables.END_CITY_TREASURE_CHEST, 0.20F));
 		PLACEMENTS.put("thorn", new Placement(LootTables.JUNGLE_TEMPLE_CHEST, 0.25F));
+		PLACEMENTS.put("ember", new Placement(LootTables.RUINED_PORTAL_CHEST, 0.25F));
 		PLACEMENTS.put("fang", new Placement(LootTables.NETHER_BRIDGE_CHEST, 0.20F));
 		PLACEMENTS.put("coil", new Placement(LootTables.STRONGHOLD_LIBRARY_CHEST, 0.20F));
 		PLACEMENTS.put("sigil", new Placement(LootTables.DESERT_PYRAMID_CHEST, 0.20F));

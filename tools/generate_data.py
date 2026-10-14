@@ -17,6 +17,7 @@ PATTERNS = {
     "weave": ("Weave", "minecraft:dark_oak_planks"),
     "halo":  ("Halo",  "minecraft:purpur_block"),
     "thorn": ("Thorn", "minecraft:mossy_cobblestone"),
+    "ember": ("Ember", "minecraft:magma_block"),
     "fang":  ("Fang",  "minecraft:netherrack"),
     "coil":  ("Coil",  "minecraft:stone_bricks"),
     "sigil": ("Sigil", "minecraft:sandstone"),

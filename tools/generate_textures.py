@@ -155,6 +155,22 @@ def fang(u, v, fw, fh):
     return None
 
 
+def ember(u, v, fw, fh):
+    """Flecks banked at the hem, guttering out towards the shoulders."""
+    h = (u * 7 + v * 13) % 11
+    if v >= HEM:
+        threshold = 7
+    elif v >= WAIST:
+        threshold = 5
+    elif v >= 4:
+        threshold = 3
+    else:
+        threshold = 1
+    if h < threshold:
+        return T4 if v >= WAIST else T2
+    return None
+
+
 def coil(u, v, fw, fh):
     """Bands winding diagonally around the piece."""
     k = (u + v) % 6
@@ -196,6 +212,7 @@ PATTERNS = {
     "weave": weave,
     "halo": halo,
     "thorn": thorn,
+    "ember": ember,
     "fang": fang,
     "coil": coil,
     "sigil": sigil,
