@@ -26,6 +26,13 @@ materials work; `docs/preview-amethyst.png` shows the same set in amethyst.*
 Coverage is the share of the armour's 648-pixel footprint the trim paints on.
 Vanilla ranges from 11% (shaper) to 63% (silence).
 
+Every pattern is shaded across five or six steps of the trim material's
+palette rather than painted in one flat tone, so a gold trim runs from a pale
+highlight down to a dark brown and an amethyst one from lilac to deep purple.
+Each pattern picks a lighting style: `relief` catches the light on edges and
+drops undersides into shadow, `strata` steps a shade deeper every two rows,
+and `depth` fades from lit shoulders to a dark hem.
+
 Templates are applied at a smithing table exactly like vanilla ones, work with
 all sixteen vanilla trim materials, and duplicate with the same
 seven-diamond-plus-base-block recipe vanilla uses.
@@ -61,7 +68,9 @@ thin and most of the mod is JSON and textures.
   recipe per pattern.
 - `assets/extratrims/textures/trims/entity/humanoid{,_leggings}/` — the trim
   textures, one pair per pattern. These must use only the eight greys of
-  vanilla's `trim_palette.png`, because the atlas recolours them per material.
+  vanilla's `trim_palette.png`: grey index i is recoloured to index i of the
+  trim material's own palette, which is what lets one texture carry light and
+  shade in every material. Any other colour is left unrecoloured.
 - `assets/minecraft/atlases/armor_trims.json` — registers those textures for
   palette swapping. Atlas sources from every pack are merged, so this adds to
   vanilla's list rather than replacing it.
@@ -99,9 +108,13 @@ shows part of it, which is worth knowing before drawing: the chest shows rows
 0-10 and has a neck cutout across rows 0-1, arms show only rows 0-5, leggings
 legs rows 0-8, boots rows 6-11, and the leggings belt rows 7-11.
 
-To add a pattern: add its bitmaps to `ART` in `generate_textures.py`, a glyph
-and colour to `generate_items.py`, a row to `PATTERNS` in `generate_data.py`,
-and a placement in `ExtraTrimsLoot`.
+Art is written as shapes, not tones: `#` means "shade this automatically"
+and the pattern's entry in `STYLES` decides how. A digit `0`-`4` pins one
+step of the ramp by hand where a shape needs it.
+
+To add a pattern: add its bitmaps to `ART` in `generate_textures.py` with a
+style in `STYLES`, a glyph and colour to `generate_items.py`, a row to
+`PATTERNS` in `generate_data.py`, and a placement in `ExtraTrimsLoot`.
 
 ## Licence
 

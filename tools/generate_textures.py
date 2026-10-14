@@ -24,9 +24,19 @@ import os
 
 from PIL import Image
 
-# trim_palette.png, lightest first. '4' is the highlight, '0' the deepest.
+# trim_palette.png, lightest first. Index i of this ramp is recoloured to
+# index i of the trim material's palette, so using several steps is what gives
+# a single trim its light and shade -- gold runs #fffd90 down to #572300.
+RAMP = [224, 192, 160, 128, 96, 64, 32, 0]
+
+# Explicit tones usable in art: '#' means "shade this automatically", while a
+# digit pins a step of the ramp.
 TONES = {"4": 224, "3": 192, "2": 160, "1": 128, "0": 96}
 T4, T3, T2, T1, T0 = 224, 192, 160, 128, 96
+
+# Keep off the last two steps: on already-dark materials such as netherite
+# they are close enough to black that the trim stops reading.
+DEEPEST = 5
 
 W, H = 64, 32
 
@@ -107,9 +117,71 @@ def ember(face, u, v, fw, fh):
         threshold = 3
     else:
         threshold = 1
-    if h < threshold:
-        return T4 if v >= 7 else T2
-    return None
+    if h >= threshold:
+        return None
+    # Embers cool as they settle: deeper steps towards the hem, with the odd
+    # bright fleck left glowing.
+    return RAMP[min(DEEPEST, v // 3 + (0 if h == 0 else 1))]
+
+
+# How each pattern is lit. All three keep a trim reading as one design while
+# spending several steps of the material's ramp instead of a single flat tone.
+#   relief  edges catch the light, undersides fall into shadow
+#   strata  each course of the design sits a step deeper than the last
+#   depth   a long fade from lit shoulders down to a dark hem
+STYLES = {
+    "umbra": "relief",
+    "totemic": "strata",
+    "halo": "relief",
+    "keystone": "strata",
+    "mosaic": "depth",
+    "zenith": "relief",
+    "harbor": "relief",
+    "runic": "depth",
+    "lattice": "strata",
+}
+
+
+def shade(rows, style):
+    """Turn a shape into tones. A digit in the art pins its own step."""
+    h = len(rows)
+    w = len(rows[0]) if h else 0
+
+    def filled(r, c):
+        return 0 <= r < h and 0 <= c < w and rows[r][c] != "."
+
+    grid = []
+    for r in range(h):
+        line = []
+        for c in range(w):
+            if not filled(r, c):
+                line.append(None)
+                continue
+
+            ch = rows[r][c]
+            if ch in TONES:
+                line.append(TONES[ch])
+                continue
+
+            lit = not filled(r - 1, c)
+            under = not filled(r + 1, c)
+
+            if style == "strata":
+                # Clean two-row courses. No edge-lighting here: these designs
+                # are built from isolated one-pixel rows, where every pixel is
+                # an edge, which would flatten the banding back to one tone.
+                idx = r // 2
+            elif style == "depth":
+                idx = r * 5 // max(1, h)
+                if lit:
+                    idx = max(0, idx - 1)
+            else:  # relief
+                idx = 0 if lit else (3 if under else 2)
+                idx += r // 4
+
+            line.append(RAMP[min(DEEPEST, idx)])
+        grid.append(line)
+    return grid
 
 
 # Visible rows per piece, measured from the vanilla armour footprint:
@@ -120,31 +192,31 @@ def ember(face, u, v, fw, fh):
 ART = {
     "umbra": {  # a chunky cross patee, plumed helm, solid boots
         "helm": [
-            "...44...",
-            "...44...",
-            ".444444.",
-            "...44...",
-            "...44...",
+            "...##...",
+            "...##...",
+            ".######.",
+            "...##...",
+            "...##...",
         ],
-        "helm_top": ["...44..."] * 8,
+        "helm_top": ["...##..."] * 8,
         "body": [
-            "44....44",
-            "4......4",
-            "...44...",
-            "...44...",
-            "..4444..",
-            "44444444",
-            "44444444",
-            "..4444..",
-            "...44...",
-            "..4444..",
-            "..4444..",
+            "##....##",
+            "#......#",
+            "...##...",
+            "...##...",
+            "..####..",
+            "########",
+            "########",
+            "..####..",
+            "...##...",
+            "..####..",
+            "..####..",
             "........",
         ],
         "arm": [
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
             "....",
             "....",
@@ -152,237 +224,237 @@ ART = {
         "side": [
             "....",
             "....",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
             "....",
             "....",
             "....",
-            "4444",
+            "####",
             "....",
         ],
         "leg": [
-            "4444",
+            "####",
             "....",
             "....",
             "....",
             "....",
             "....",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            "4444",
-            "4444",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            "####",
+            "####",
         ],
     },
     "totemic": {  # a long tapering stack with a bold wing bar
         "helm": [
-            "..4444..",
-            ".44..44.",
+            "..####..",
+            ".##..##.",
             "........",
-            "..4444..",
-            ".44..44.",
+            "..####..",
+            ".##..##.",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            "..4444..",
-            ".44..44.",
-            "..4444..",
-            "44444444",
-            "..4444..",
-            ".44..44.",
-            "..4444..",
-            ".444444.",
-            "..4444..",
+            "##....##",
+            "#......#",
+            "..####..",
+            ".##..##.",
+            "..####..",
+            "########",
+            "..####..",
+            ".##..##.",
+            "..####..",
+            ".######.",
+            "..####..",
             "........",
         ],
         "arm": [
-            "4444",
-            "4444",
-            "4...",
+            "####",
+            "####",
+            "#...",
             "....",
             "....",
             "....",
         ],
         "leg": [
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4444",
-            "4444",
+            ".##.",
+            "####",
+            "####",
         ],
     },
     "halo": {  # a shallow arch over a triangular tent, crowned helm
         "helm": [
-            "44444444",
-            ".4.44.4.",
+            "########",
+            ".#.##.#.",
             "........",
             "........",
             "........",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            "..4444..",
-            ".4....4.",
-            "4......4",
-            "...44...",
-            "..4..4..",
-            ".4....4.",
-            "44444444",
-            ".444444.",
-            "..4..4..",
+            "##....##",
+            "#......#",
+            "..####..",
+            ".#....#.",
+            "#......#",
+            "...##...",
+            "..#..#..",
+            ".#....#.",
+            "########",
+            ".######.",
+            "..#..#..",
             "........",
         ],
         "arm": [
             "....",
             "....",
-            "4444",
+            "####",
             "....",
             "....",
             "....",
         ],
         "leg": [
             "....",
-            "4444",
+            "####",
             "....",
             "....",
             "....",
             "....",
-            ".44.",
-            "4444",
+            ".##.",
+            "####",
             "....",
-            ".44.",
-            "4444",
-            "4444",
+            ".##.",
+            "####",
+            "####",
         ],
     },
     "keystone": {  # dense masonry blocks, bracketed shoulders
         "helm": [
-            "4..4..4.",
-            ".44..44.",
+            "#..#..#.",
+            ".##..##.",
             "........",
-            ".44..44.",
-            "4..44..4",
+            ".##..##.",
+            "#..##..#",
         ],
         "body": [
-            "44....44",
-            "44....44",
-            ".44..44.",
-            "4..44..4",
-            ".44..44.",
+            "##....##",
+            "##....##",
+            ".##..##.",
+            "#..##..#",
+            ".##..##.",
             "........",
-            ".44..44.",
-            "4..44..4",
-            ".44..44.",
-            ".4.44.4.",
-            "..4444..",
+            ".##..##.",
+            "#..##..#",
+            ".##..##.",
+            ".#.##.#.",
+            "..####..",
             "........",
         ],
         "arm": [
-            "4444",
-            "44..",
-            "44..",
-            "4444",
+            "####",
+            "##..",
+            "##..",
+            "####",
             "....",
             "....",
         ],
         "leg": [
-            ".44.",
-            "4..4",
-            ".44.",
+            ".##.",
+            "#..#",
+            ".##.",
             "....",
-            ".44.",
-            "4..4",
-            ".44.",
+            ".##.",
+            "#..#",
+            ".##.",
             "....",
-            ".44.",
-            "4..4",
-            ".44.",
+            ".##.",
+            "#..#",
+            ".##.",
             "....",
         ],
     },
     "mosaic": {  # a centred vertical stack of tiles
         "helm": [
-            "4......4",
+            "#......#",
             "........",
-            "..4444..",
-            ".4....4.",
+            "..####..",
+            ".#....#.",
             "........",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            "..4444..",
-            ".4....4.",
-            "..4444..",
+            "##....##",
+            "#......#",
+            "..####..",
+            ".#....#.",
+            "..####..",
             "........",
-            ".444444.",
-            "..4..4..",
-            ".444444.",
-            "..4444..",
-            "..4444..",
+            ".######.",
+            "..#..#..",
+            ".######.",
+            "..####..",
+            "..####..",
             "........",
         ],
         "arm": [
             "....",
             "....",
-            "4444",
+            "####",
             "....",
             "....",
             "....",
         ],
         "leg": [
-            "..4.",
-            ".44.",
+            "..#.",
+            ".##.",
             "....",
-            "4444",
-            ".44.",
+            "####",
+            ".##.",
             "....",
-            "4444",
-            ".44.",
+            "####",
+            ".##.",
             "....",
-            "4444",
-            "4444",
-            ".44.",
+            "####",
+            "####",
+            ".##.",
         ],
     },
     "zenith": {  # a long thin cross with a single crossbar
         "helm": [
-            ".4.44.4.",
-            "4.4..4.4",
+            ".#.##.#.",
+            "#.#..#.#",
             "........",
             "........",
             "........",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            "...44...",
-            "...44...",
-            "...44...",
-            ".444444.",
-            "...44...",
-            "...44...",
-            "...44...",
-            "...44...",
-            "...44...",
+            "##....##",
+            "#......#",
+            "...##...",
+            "...##...",
+            "...##...",
+            ".######.",
+            "...##...",
+            "...##...",
+            "...##...",
+            "...##...",
+            "...##...",
             "........",
         ],
         "arm": [
             "....",
-            "4444",
+            "####",
             "....",
             "....",
             "....",
@@ -391,88 +463,88 @@ ART = {
         "leg": [
             "....",
             "....",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            ".44.",
-            "4444",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            ".##.",
+            "####",
             "....",
         ],
     },
     "harbor": {  # a mast with two spars widening downward
         "helm": [
-            "...44...",
-            "...44...",
-            "...44...",
-            "...44...",
-            "...44...",
+            "...##...",
+            "...##...",
+            "...##...",
+            "...##...",
+            "...##...",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            "...44...",
-            "..4444..",
-            "...44...",
-            "...44...",
-            ".444444.",
-            "...44...",
-            "44444444",
-            ".444444.",
-            "..4444..",
+            "##....##",
+            "#......#",
+            "...##...",
+            "..####..",
+            "...##...",
+            "...##...",
+            ".######.",
+            "...##...",
+            "########",
+            ".######.",
+            "..####..",
             "........",
         ],
         "arm": [
             "....",
-            "4444",
+            "####",
             "....",
-            "4444",
+            "####",
             "....",
             "....",
         ],
         "leg": [
             "....",
-            ".44.",
-            ".44.",
-            ".44.",
-            "4444",
-            ".44.",
-            ".44.",
-            ".44.",
+            ".##.",
+            ".##.",
+            ".##.",
+            "####",
+            ".##.",
+            ".##.",
+            ".##.",
             "....",
-            "4444",
-            "4444",
+            "####",
+            "####",
             "....",
         ],
     },
     "runic": {  # nested arches under bold shoulder bars
         "helm": [
-            "44....44",
-            "...44...",
+            "##....##",
+            "...##...",
             "........",
-            "..4444..",
-            ".4....4.",
+            "..####..",
+            ".#....#.",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            "...44...",
-            "..4444..",
-            ".4....4.",
+            "##....##",
+            "#......#",
+            "...##...",
+            "..####..",
+            ".#....#.",
             "........",
-            "..4444..",
-            ".4....4.",
-            "4......4",
-            "..4444..",
-            "..4444..",
+            "..####..",
+            ".#....#.",
+            "#......#",
+            "..####..",
+            "..####..",
             "........",
         ],
         "arm": [
-            "4444",
-            "4444",
+            "####",
+            "####",
             "....",
             "....",
             "....",
@@ -480,61 +552,61 @@ ART = {
         ],
         "leg": [
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4444",
+            ".##.",
+            "####",
         ],
     },
     "lattice": {  # zigzag rows with hollow shoulder rings
         "helm": [
-            ".4.44.4.",
-            "4.4..4.4",
+            ".#.##.#.",
+            "#.#..#.#",
             "........",
-            ".4.44.4.",
-            "4.4..4.4",
+            ".#.##.#.",
+            "#.#..#.#",
         ],
         "body": [
-            "44....44",
-            "4......4",
-            ".4.44.4.",
-            "4.4..4.4",
+            "##....##",
+            "#......#",
+            ".#.##.#.",
+            "#.#..#.#",
             "........",
-            ".4.44.4.",
-            "4.4..4.4",
+            ".#.##.#.",
+            "#.#..#.#",
             "........",
-            "44444444",
-            ".4.44.4.",
-            "..4444..",
+            "########",
+            ".#.##.#.",
+            "..####..",
             "........",
         ],
         "arm": [
-            "4444",
-            "4..4",
-            "4..4",
-            "4444",
+            "####",
+            "#..#",
+            "#..#",
+            "####",
             "....",
             "....",
         ],
         "leg": [
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            ".44.",
-            "4..4",
+            ".##.",
+            "#..#",
             "....",
-            "4444",
-            ".44.",
+            "####",
+            ".##.",
             "....",
         ],
     },
@@ -549,29 +621,29 @@ PATTERN_ORDER = [
 FUNCTIONS = {"ember": ember}
 
 
-def art_motif(art):
-    """Turn a dict of per-face bitmaps into a motif function."""
+def art_motif(art, style):
+    """Turn a dict of per-face bitmaps into a motif function, shaded."""
+    shaded = {key: shade(rows, style) for key, rows in art.items()}
 
     def motif(face, u, v, fw, fh):
         key, offset = FACE_ART[face]
-        rows = art.get(key)
+        grid = shaded.get(key)
 
-        while rows is None and key in ART_FALLBACK:
+        while grid is None and key in ART_FALLBACK:
             key = ART_FALLBACK[key]
-            rows = art.get(key)
+            grid = shaded.get(key)
 
-        if rows is None:
+        if grid is None:
             return None
 
         row = v + offset
-        if not 0 <= row < len(rows):
+        if not 0 <= row < len(grid):
             return None
 
-        line = rows[row]
-        if not 0 <= u < len(line):
+        if not 0 <= u < len(grid[row]):
             return None
 
-        return TONES.get(line[u])
+        return grid[row][u]
 
     return motif
 
@@ -579,7 +651,7 @@ def art_motif(art):
 def motif_for(name):
     if name in FUNCTIONS:
         return FUNCTIONS[name]
-    return art_motif(ART[name])
+    return art_motif(ART[name], STYLES[name])
 
 
 def check_art():
@@ -593,7 +665,7 @@ def check_art():
                 if len(row) != want:
                     problems.append(f"{name}.{key}[{i}] is {len(row)} wide, expected {want}")
                 for ch in row:
-                    if ch != "." and ch not in TONES:
+                    if ch not in (".", "#") and ch not in TONES:
                         problems.append(f"{name}.{key}[{i}] has unknown tone {ch!r}")
     if problems:
         raise SystemExit("art errors:\n  " + "\n  ".join(problems))
