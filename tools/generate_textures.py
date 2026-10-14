@@ -38,6 +38,18 @@ T4, T3, T2, T1, T0 = 224, 192, 160, 128, 96
 # they are close enough to black that the trim stops reading.
 DEEPEST = 5
 
+# One lighting gradient spans the whole 12-row armour box and every bitmap is
+# shaded against it, so a helmet, chestplate, leggings and boots all share the
+# same fall of light. Spreading the ramp over those rows works out at about
+# one step every two rows, which is what keeps a transition gradual instead of
+# snapping from the highlight straight to a shadow.
+FADE_PER_ROW = DEEPEST / 11.0
+
+
+def ramp_index(row, accent=0.0):
+    """Step of the ramp for a row of the armour box, plus a small nudge."""
+    return max(0, min(DEEPEST, int(round(row * FADE_PER_ROW + accent))))
+
 W, H = 64, 32
 
 # Standard armour UV boxes: name -> (x, y, w, h)
@@ -119,16 +131,18 @@ def ember(face, u, v, fw, fh):
         threshold = 1
     if h >= threshold:
         return None
-    # Embers cool as they settle: deeper steps towards the hem, with the odd
-    # bright fleck left glowing.
-    return RAMP[min(DEEPEST, v // 3 + (0 if h == 0 else 1))]
+    # Embers cool as they settle, following the same gradient as the rest,
+    # with the odd fleck left glowing a step brighter.
+    return RAMP[ramp_index(v, -0.6 if h == 0 else 0.0)]
 
 
 # How each pattern is lit. All three keep a trim reading as one design while
 # spending several steps of the material's ramp instead of a single flat tone.
-#   relief  edges catch the light, undersides fall into shadow
-#   strata  each course of the design sits a step deeper than the last
-#   depth   a long fade from lit shoulders down to a dark hem
+# All three follow the same gradual top-to-bottom gradient and differ only in
+# how they ride it, so none of them jumps more than a step at a time.
+#   relief  nudged a little lighter on top edges, darker on undersides
+#   strata  held flat across each two-row course, stepping between courses
+#   depth   the bare gradient, the smoothest of the three
 STYLES = {
     "umbra": "relief",
     "totemic": "strata",
@@ -163,23 +177,22 @@ def shade(rows, style):
                 line.append(TONES[ch])
                 continue
 
-            lit = not filled(r - 1, c)
-            under = not filled(r + 1, c)
-
             if style == "strata":
-                # Clean two-row courses. No edge-lighting here: these designs
-                # are built from isolated one-pixel rows, where every pixel is
-                # an edge, which would flatten the banding back to one tone.
-                idx = r // 2
+                # Flat across each two-row course. No edge-lighting here:
+                # these designs are built from isolated one-pixel rows, where
+                # every pixel is an edge, which would only add noise.
+                idx = ramp_index(r // 2 * 2)
             elif style == "depth":
-                idx = r * 5 // max(1, h)
-                if lit:
-                    idx = max(0, idx - 1)
+                idx = ramp_index(r)
             else:  # relief
-                idx = 0 if lit else (3 if under else 2)
-                idx += r // 4
+                lit = not filled(r - 1, c)
+                under = not filled(r + 1, c)
+                # Deliberately gentle: a bigger nudge than this can put a
+                # highlight directly above a shadow and undo the gradient.
+                accent = -0.35 if lit else (0.35 if under else 0.0)
+                idx = ramp_index(r, accent)
 
-            line.append(RAMP[min(DEEPEST, idx)])
+            line.append(RAMP[idx])
         grid.append(line)
     return grid
 

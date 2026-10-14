@@ -29,9 +29,15 @@ Vanilla ranges from 11% (shaper) to 63% (silence).
 Every pattern is shaded across five or six steps of the trim material's
 palette rather than painted in one flat tone, so a gold trim runs from a pale
 highlight down to a dark brown and an amethyst one from lilac to deep purple.
-Each pattern picks a lighting style: `relief` catches the light on edges and
-drops undersides into shadow, `strata` steps a shade deeper every two rows,
-and `depth` fades from lit shoulders to a dark hem.
+
+A single lighting gradient spans the whole armour box and every piece is
+shaded against it, so a helmet, chestplate, leggings and boots share one fall
+of light. The ramp is spread over those rows at about one step every two
+rows, and neighbouring pixels of a design never differ by more than a step,
+which is what keeps the fade gradual instead of snapping from highlight to
+shadow. Patterns differ only in how they ride that gradient: `relief` is
+nudged lighter on top edges and darker on undersides, `strata` holds flat
+across each two-row course, and `depth` follows the bare gradient.
 
 Templates are applied at a smithing table exactly like vanilla ones, work with
 all sixteen vanilla trim materials, and duplicate with the same
