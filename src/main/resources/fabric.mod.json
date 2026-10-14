@@ -1,0 +1,27 @@
+{
+	"schemaVersion": 1,
+	"id": "extratrims",
+	"version": "${version}",
+	"name": "Extra Trims",
+	"description": "Adds eight new armor trim patterns, each with its own smithing template found in a fitting structure.",
+	"authors": [
+		"larsb6"
+	],
+	"contact": {
+		"repo": "https://github.com/larsb6/extratrims-mod-1.21.11"
+	},
+	"license": "MIT",
+	"icon": "assets/extratrims/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.larsb6.extratrims.ExtraTrims"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${minecraft_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

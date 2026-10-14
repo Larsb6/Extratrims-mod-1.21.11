@@ -1,0 +1,44 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:paletted_permutations",
+      "palette_key": "minecraft:trims/color_palettes/trim_palette",
+      "permutations": {
+        "amethyst": "minecraft:trims/color_palettes/amethyst",
+        "copper": "minecraft:trims/color_palettes/copper",
+        "copper_darker": "minecraft:trims/color_palettes/copper_darker",
+        "diamond": "minecraft:trims/color_palettes/diamond",
+        "diamond_darker": "minecraft:trims/color_palettes/diamond_darker",
+        "emerald": "minecraft:trims/color_palettes/emerald",
+        "gold": "minecraft:trims/color_palettes/gold",
+        "gold_darker": "minecraft:trims/color_palettes/gold_darker",
+        "iron": "minecraft:trims/color_palettes/iron",
+        "iron_darker": "minecraft:trims/color_palettes/iron_darker",
+        "lapis": "minecraft:trims/color_palettes/lapis",
+        "netherite": "minecraft:trims/color_palettes/netherite",
+        "netherite_darker": "minecraft:trims/color_palettes/netherite_darker",
+        "quartz": "minecraft:trims/color_palettes/quartz",
+        "redstone": "minecraft:trims/color_palettes/redstone",
+        "resin": "minecraft:trims/color_palettes/resin"
+      },
+      "textures": [
+        "extratrims:trims/entity/humanoid/crest",
+        "extratrims:trims/entity/humanoid_leggings/crest",
+        "extratrims:trims/entity/humanoid/tusk",
+        "extratrims:trims/entity/humanoid_leggings/tusk",
+        "extratrims:trims/entity/humanoid/thorn",
+        "extratrims:trims/entity/humanoid_leggings/thorn",
+        "extratrims:trims/entity/humanoid/lattice",
+        "extratrims:trims/entity/humanoid_leggings/lattice",
+        "extratrims:trims/entity/humanoid/prism",
+        "extratrims:trims/entity/humanoid_leggings/prism",
+        "extratrims:trims/entity/humanoid/ember",
+        "extratrims:trims/entity/humanoid_leggings/ember",
+        "extratrims:trims/entity/humanoid/weave",
+        "extratrims:trims/entity/humanoid_leggings/weave",
+        "extratrims:trims/entity/humanoid/halo",
+        "extratrims:trims/entity/humanoid_leggings/halo"
+      ]
+    }
+  ]
+}
